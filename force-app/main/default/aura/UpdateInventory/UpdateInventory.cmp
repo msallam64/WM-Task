@@ -1,0 +1,7 @@
+<aura:component controller="UpdateInventory">
+    
+    <aura:handler name="init" value="{!this}" action="{!c.UpdateInventoryAction}"/>
+    <aura:iteration >
+        
+    </aura:iteration>
+</aura:component>
