@@ -3,20 +3,18 @@ private class UpdateInventoryTest {
     
     @isTest
     static void testUpdateInventoryAction() {
-        // Define the expected API response
         String apiResponse = '[{"_id":"1","name":"Equipment 1","sku":"SKU1","cost":100.0,"quantity":10.0,"maintenanceperiod":12.0,"lifespan":24.0,"replacement":false}]';
         
         Product2 product = new Product2(SKU__c = 'ssss', Name = 'Product 1');
         insert product;
-        // Set up a mock HTTP response
         Test.setMock(HttpCalloutMock.class, new MockHttpResponse(apiResponse, 200));
         
-        // Call the method to be tested
+        List<String> productSKUs = new List<String>{'SKU0', 'SKU1', 'SKU2'};
+        
         Test.startTest();
-        UpdateInventory.UpdateInventoryAction();
+        UpdateInventory.UpdateInventoryAction(productSKUs);
         Test.stopTest();
         
-        // Verify that the Equipment records were created/updated correctly
         List<Product2> equipmentList = [SELECT Name, SKU__c, Price__c, Quantity__c, maintenanceperiod__c, lifespan__c, replacement__c FROM Product2];
         System.assertEquals(1, equipmentList.size());
         System.assertEquals('Equipment 1', equipmentList[0].Name);
@@ -28,7 +26,6 @@ private class UpdateInventoryTest {
         System.assertEquals(false, equipmentList[0].replacement__c);
     }
     
-    // Mock HTTP response class
     private class MockHttpResponse implements HttpCalloutMock {
         String apiResponse;
         Integer statusCode;
